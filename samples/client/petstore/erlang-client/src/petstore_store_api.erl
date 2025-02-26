@@ -32,10 +32,10 @@ delete_order(OrderId, Optional) ->
 %% Returns a map of status codes to quantities
 -spec get_inventory() -> {ok, maps:map(), petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
 get_inventory() ->
-    get_inventory(, #{}).
+    get_inventory(#{}).
 
--spec get_inventory(, maps:map()) -> {ok, maps:map(), petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
-get_inventory(, Optional) ->
+-spec get_inventory(maps:map()) -> {ok, maps:map(), petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
+get_inventory(Optional) ->
     _OptionalParams = maps:get(params, Optional, #{}),
     Cfg = maps:get(cfg, Optional, application:get_env(petstore_api, config, #{})),
 

@@ -114,12 +114,12 @@ get_user_by_name(Username, Optional) ->
     petstore_utils:request(Method, Path, QS, ContentTypeHeader++Headers, Body1, Opts, Cfg).
 
 %% @doc Logs user into the system
--spec login_user(binary()binary()) -> {ok, binary(), petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
-login_user(UsernamePassword) ->
-    login_user(UsernamePassword, #{}).
+-spec login_user(binary(), binary()) -> {ok, binary(), petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
+login_user(Username, Password) ->
+    login_user(Username, Password, #{}).
 
--spec login_user(binary()binary(), maps:map()) -> {ok, binary(), petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
-login_user(UsernamePassword, Optional) ->
+-spec login_user(binary(), binary(), maps:map()) -> {ok, binary(), petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
+login_user(Username, Password, Optional) ->
     _OptionalParams = maps:get(params, Optional, #{}),
     Cfg = maps:get(cfg, Optional, application:get_env(petstore_api, config, #{})),
 
@@ -136,10 +136,10 @@ login_user(UsernamePassword, Optional) ->
 %% @doc Logs out current logged in user session
 -spec logout_user() -> {ok, [], petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
 logout_user() ->
-    logout_user(, #{}).
+    logout_user(#{}).
 
--spec logout_user(, maps:map()) -> {ok, [], petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
-logout_user(, Optional) ->
+-spec logout_user(maps:map()) -> {ok, [], petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
+logout_user(Optional) ->
     _OptionalParams = maps:get(params, Optional, #{}),
     Cfg = maps:get(cfg, Optional, application:get_env(petstore_api, config, #{})),
 
@@ -155,12 +155,12 @@ logout_user(, Optional) ->
 
 %% @doc Updated user
 %% This can only be done by the logged in user.
--spec update_user(binary()petstore_user:petstore_user()) -> {ok, [], petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
-update_user(UsernamePetstoreUser) ->
-    update_user(UsernamePetstoreUser, #{}).
+-spec update_user(binary(), petstore_user:petstore_user()) -> {ok, [], petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
+update_user(Username, PetstoreUser) ->
+    update_user(Username, PetstoreUser, #{}).
 
--spec update_user(binary()petstore_user:petstore_user(), maps:map()) -> {ok, [], petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
-update_user(UsernamePetstoreUser, Optional) ->
+-spec update_user(binary(), petstore_user:petstore_user(), maps:map()) -> {ok, [], petstore_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), petstore_utils:response_info()}.
+update_user(Username, PetstoreUser, Optional) ->
     _OptionalParams = maps:get(params, Optional, #{}),
     Cfg = maps:get(cfg, Optional, application:get_env(petstore_api, config, #{})),
 
