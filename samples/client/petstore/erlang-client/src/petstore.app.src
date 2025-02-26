@@ -6,8 +6,7 @@
     [kernel,
      stdlib,
      ssl,
-     hackney,
-     ctx
+     hackney
     ]},
   {env, [{host, "petstore.swagger.io"}]},
   {modules, []},

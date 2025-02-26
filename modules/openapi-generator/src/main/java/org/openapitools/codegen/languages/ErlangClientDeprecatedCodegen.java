@@ -41,8 +41,8 @@ import java.util.regex.Pattern;
 import static org.openapitools.codegen.utils.StringUtils.camelize;
 import static org.openapitools.codegen.utils.StringUtils.underscore;
 
-public class ErlangClientCodegen extends DefaultCodegen implements CodegenConfig {
-    private final Logger LOGGER = LoggerFactory.getLogger(ErlangClientCodegen.class);
+public class ErlangClientDeprecatedCodegen extends DefaultCodegen implements CodegenConfig {
+    private final Logger LOGGER = LoggerFactory.getLogger(ErlangClientDeprecatedCodegen.class);
 
     @Setter protected String packageName = "openapi";
     @Setter protected String packageVersion = "1.0.0";
@@ -55,15 +55,15 @@ public class ErlangClientCodegen extends DefaultCodegen implements CodegenConfig
 
     @Override
     public String getName() {
-        return "erlang-client";
+        return "erlang-client-deprecated";
     }
 
     @Override
     public String getHelp() {
-        return "Generates an Erlang client library (beta).";
+        return "Generates an Erlang client library (deprecated).";
     }
 
-    public ErlangClientCodegen() {
+    public ErlangClientDeprecatedCodegen() {
         super();
 
         modifyFeatureSet(features -> features
@@ -91,7 +91,7 @@ public class ErlangClientCodegen extends DefaultCodegen implements CodegenConfig
         modelTemplateFiles.put("model.mustache", ".erl");
         apiTemplateFiles.put("api.mustache", ".erl");
 
-        embeddedTemplateDir = templateDir = "erlang-client";
+        embeddedTemplateDir = templateDir = "erlang-client-deprecated";
 
         setReservedWordsLowerCase(
                 Arrays.asList(
@@ -451,8 +451,8 @@ public class ErlangClientCodegen extends DefaultCodegen implements CodegenConfig
             this.produces = o.produces;
             this.bodyParam = o.bodyParam;
             this.allParams = o.allParams;
-            this.arityRequired = Integer.toString(lengthRequired(o.allParams));
-            this.arityOptional = Integer.toString(lengthRequired(o.allParams) + 1);
+            this.arityRequired = Integer.toString(lengthRequired(o.allParams) + 1);
+            this.arityOptional = Integer.toString(lengthRequired(o.allParams) + 2);
             this.bodyParams = o.bodyParams;
             this.pathParams = o.pathParams;
             this.queryParams = o.queryParams;

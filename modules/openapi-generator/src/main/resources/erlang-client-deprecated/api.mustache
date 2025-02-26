@@ -11,12 +11,12 @@
 {{^notes.isEmpty}}
 %% {{{notes}}}
 {{/notes.isEmpty}}
--spec {{operationId}}({{#allParams}}{{#required}}{{{dataType}}}{{/required}}{{/allParams}}) -> {ok, {{{returnType}}}{{^returnType}}[]{{/returnType}}, {{packageName}}_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), {{packageName}}_utils:response_info()}.
-{{operationId}}({{#allParams}}{{#required}}{{paramName}}{{/required}}{{/allParams}}) ->
-    {{operationId}}({{#allParams}}{{#required}}{{paramName}}{{/required}}{{/allParams}}, #{}).
+-spec {{operationId}}(ctx:ctx(){{#allParams}}{{#required}}, {{{dataType}}}{{/required}}{{/allParams}}) -> {ok, {{{returnType}}}{{^returnType}}[]{{/returnType}}, {{packageName}}_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), {{packageName}}_utils:response_info()}.
+{{operationId}}(Ctx{{#allParams}}{{#required}}, {{paramName}}{{/required}}{{/allParams}}) ->
+    {{operationId}}(Ctx{{#allParams}}{{#required}}, {{paramName}}{{/required}}{{/allParams}}, #{}).
 
--spec {{operationId}}({{#allParams}}{{#required}}{{{dataType}}}{{/required}}{{/allParams}}, maps:map()) -> {ok, {{{returnType}}}{{^returnType}}[]{{/returnType}}, {{packageName}}_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), {{packageName}}_utils:response_info()}.
-{{operationId}}({{#allParams}}{{#required}}{{paramName}}{{/required}}{{/allParams}}, Optional) ->
+-spec {{operationId}}(ctx:ctx(){{#allParams}}{{#required}}, {{{dataType}}}{{/required}}{{/allParams}}, maps:map()) -> {ok, {{{returnType}}}{{^returnType}}[]{{/returnType}}, {{packageName}}_utils:response_info()} | {ok, hackney:client_ref()} | {error, term(), {{packageName}}_utils:response_info()}.
+{{operationId}}(Ctx{{#allParams}}{{#required}}, {{paramName}}{{/required}}{{/allParams}}, Optional) ->
     _OptionalParams = maps:get(params, Optional, #{}),
     Cfg = maps:get(cfg, Optional, application:get_env({{packageName}}_api, config, #{})),
 
@@ -28,7 +28,7 @@
     ContentTypeHeader = {{packageName}}_utils:select_header_content_type([{{#consumes}}{{^-first}}, {{/-first}}<<"{{{mediaType}}}">>{{/consumes}}]),
     Opts = maps:get(hackney_opts, Optional, []),
 
-    {{packageName}}_utils:request(Method, Path, QS, ContentTypeHeader++Headers, Body1, Opts, Cfg).
+    {{packageName}}_utils:request(Ctx, Method, Path, QS, ContentTypeHeader++Headers, Body1, Opts, Cfg).
 
     {{/operation}}
 

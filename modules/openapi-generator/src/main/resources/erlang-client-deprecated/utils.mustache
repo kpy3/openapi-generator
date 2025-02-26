@@ -1,6 +1,6 @@
--module(petstore_utils).
+-module({{packageName}}_utils).
 
--export([request/7,
+-export([request/8,
          select_header_content_type/1,
          optional_params/2]).
 
@@ -8,7 +8,7 @@
                            headers := list()}.
 -export_type([response_info/0]).
 
-request(Method, Path, QS, Headers, Body, Opts, Cfg) ->
+request(_Ctx, Method, Path, QS, Headers, Body, Opts, Cfg) ->
     {Headers1, QS1} = update_params_with_auth(Cfg, Headers, QS),
     Host = maps:get(host, Cfg, "localhost:8001"),
     Path1 = prepare_path(Path),
@@ -17,7 +17,7 @@ request(Method, Path, QS, Headers, Body, Opts, Cfg) ->
     ConfigHackneyOpts = maps:get(hackney_opts, Cfg, []),
     Body1 = case lists:keyfind(<<"Content-Type">>, 1, Headers1) of
                 {_, <<"application/json", _/binary>>} ->
-                    json:encode(Body);
+                    jsx:encode(Body);
                 _ ->
                     Body
             end,
@@ -50,7 +50,7 @@ convert(PathPart) when is_list(PathPart) or is_binary(PathPart) ->
 decode_response(Headers, Body) ->
     case lists:keyfind(<<"Content-Type">>, 1, Headers) of
         {_, <<"application/json", _/binary>>} ->
-            json:decode(Body);
+            jsx:decode(Body, [return_maps, {labels, atom}]);
         %% TODO: yml, protobuf, user defined function
         _ ->
             Body
@@ -81,13 +81,10 @@ auth_with_prefix(Cfg, Key, Token) ->
 
 update_params_with_auth(Cfg, Headers, QS) ->
     AuthSettings = maps:get(auth, Cfg, #{}),
-    Auths = #{ 'petstore_auth' =>
-                #{type => 'oauth2',
-                  key => <<"Authorization">>,
-                  in => header}, 'api_key' =>
-                #{type => 'apiKey',
-                  key => <<"api_key">>,
-                  in => header}},
+    Auths = #{ {{#authMethods}}'{{name}}' =>
+                #{type => '{{type}}',
+                  key => <<"{{#isApiKey}}{{keyParamName}}{{/isApiKey}}{{^isApiKey}}Authorization{{/isApiKey}}">>,
+                  in => {{^isApiKey}}header{{/isApiKey}}{{#isKeyInHeader}}header{{/isKeyInHeader}}{{#isKeyInQuery}}query{{/isKeyInQuery}}}{{^-last}}, {{/-last}}{{/authMethods}}},
 
     maps:fold(fun(AuthName, #{type := _Type,
                               in := In,
